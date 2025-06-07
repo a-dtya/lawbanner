@@ -40,6 +40,8 @@ export const PolicyBannerCustomisationTable = pgTable("policy_banner_customisati
 export const productRelations = relations(ProductTable, ({ one, many }) => ({
     policyBannerCustomisation: one(PolicyBannerCustomisationTable),
     productViews: many(ProductViewsTable),
+    countryGroupPolicyOverrides: many(CountryGroupPolicyOverrides), // each url can have multiple country group policy overrides, since it's displayed in multiple countries
+    aiGeneratedContents: many(AiGeneratedContents),
 }));
     
 
@@ -116,6 +118,33 @@ export const countryGroupPolicyOverridesRelations = relations(CountryGroupPolicy
     }),
     countryGroup: one(CountryGroups, {
         fields: [CountryGroupPolicyOverrides.countryGroupId],
+        references: [CountryGroups.id],
+    }),
+}));
+
+
+export const AiGeneratedContents = pgTable('ai_generated_contents', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  productId: uuid('product_id')
+    .references(() => ProductTable.id, { onDelete: 'cascade' }),
+  countryGroupId: uuid('country_group_id')
+    .references(() => CountryGroups.id, { onDelete: 'cascade' }),
+  type: text('type').notNull().default('terms'), // 'terms', 'privacy', 'banner'
+  content: text('content').notNull().default(''),
+  generatedBy: text('generated_by').default('AI'), // Or 'user'
+  createdAt,
+  updatedAt,
+}, table => ({
+    pk: primaryKey({ columns: [table.productId, table.countryGroupId] })
+}));
+
+export const aiGeneratedContentsRelations = relations(AiGeneratedContents, ({ one }) => ({
+    product: one(ProductTable, {
+        fields: [AiGeneratedContents.productId],
+        references: [ProductTable.id],
+    }),
+    countryGroup: one(CountryGroups, {
+        fields: [AiGeneratedContents.countryGroupId],
         references: [CountryGroups.id],
     }),
 }));
