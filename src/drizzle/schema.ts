@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, uuid, timestamp, index, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, timestamp, index, boolean, primaryKey } from "drizzle-orm/pg-core";
 
 const createdAt = timestamp("created_at", {withTimezone: true}).notNull().defaultNow();
 const updatedAt = timestamp("updated_at", {withTimezone: true}).notNull().defaultNow().$onUpdate(() => new Date());
@@ -92,4 +92,30 @@ export const CountryGroups = pgTable('country_groups', {
 
 export const countryGroupsRelations = relations(CountryGroups, ({ one, many }) => ({
     countries: many(Countries),
+}));
+
+
+export const CountryGroupPolicyOverrides = pgTable('country_group_policy_overrides', {
+    productId: uuid('product_id')
+        .references(() => ProductTable.id, { onDelete: 'cascade' }),
+    countryGroupId: uuid('country_group_id')
+        .references(() => CountryGroups.id, { onDelete: 'cascade' }),
+    customPolicyUrl: text('custom_policy_url'), // Optional override
+    customMessage: text('custom_message'),     // Optional region-specific message
+    isBannerHidden: boolean('is_banner_hidden').default(false),
+    createdAt,
+    updatedAt,
+}, table => ({
+    pk: primaryKey({ columns: [table.productId, table.countryGroupId] })
+}));
+
+export const countryGroupPolicyOverridesRelations = relations(CountryGroupPolicyOverrides, ({ one }) => ({
+    product: one(ProductTable, {
+        fields: [CountryGroupPolicyOverrides.productId],
+        references: [ProductTable.id],
+    }),
+    countryGroup: one(CountryGroups, {
+        fields: [CountryGroupPolicyOverrides.countryGroupId],
+        references: [CountryGroups.id],
+    }),
 }));
