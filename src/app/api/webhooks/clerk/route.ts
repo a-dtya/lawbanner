@@ -2,6 +2,7 @@ import { db } from '@/drizzle/db'
 import { UserSubscriptionTable } from '@/drizzle/schema'
 import { verifyWebhook } from '@clerk/nextjs/webhooks'
 import { NextRequest } from 'next/server'
+import createUserSubscription from '@/server/db/subscription'
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
     //custom business logic, to subscribe to free tier when user is created
     switch(eventType){
         case 'user.created':
-            await db.insert(UserSubscriptionTable).values({
+            await createUserSubscription({
                 clerkUserId: event.data.id,
                 tier: 'free',
             })
