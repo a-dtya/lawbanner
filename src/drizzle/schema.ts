@@ -49,3 +49,26 @@ export const policyBannerCustomisationRelations = relations(PolicyBannerCustomis
         references: [ProductTable.id],
     }),
 }));
+
+
+export const ProductViewsTable = pgTable('product_views', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  productId: uuid('product_id').references(() => ProductTable.id, { onDelete: 'cascade' }),
+  countryId: uuid('country_id').references(() => Countries.id),
+  visitedAt: timestamp('visited_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+
+export const Countries = pgTable('countries', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name'),
+  code: text('code'), // e.g., "IN", "US", "DE"
+  countryGroupId: uuid('country_group_id').references(() => CountryGroups.id),
+});
+
+
+export const CountryGroups = pgTable('country_groups', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name'), // e.g., "GDPR", "Minimal", etc.
+  description: text('description'),
+});
