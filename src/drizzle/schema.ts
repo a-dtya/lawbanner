@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, uuid, timestamp, index, boolean, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, timestamp, index, boolean, primaryKey, pgEnum } from "drizzle-orm/pg-core";
+import {subscriptionTiers, SubscriptionTier} from "@/data/subscriptionTiers";
 
 const createdAt = timestamp("created_at", {withTimezone: true}).notNull().defaultNow();
 const updatedAt = timestamp("updated_at", {withTimezone: true}).notNull().defaultNow().$onUpdate(() => new Date());
@@ -148,3 +149,32 @@ export const aiGeneratedContentsRelations = relations(AiGeneratedContents, ({ on
         references: [CountryGroups.id],
     }),
 }));
+
+
+
+export const TierEnum = pgEnum(
+    "tier",
+    Object.keys(subscriptionTiers) as [SubscriptionTier]
+  )
+  
+export const UserSubscriptionTable = pgTable(
+"user_subscriptions",
+{
+    id: uuid("id").primaryKey().defaultRandom(),
+    clerkUserId: text("clerk_user_id").notNull().unique(),
+    stripeSubscriptionItemId: text("stripe_subscription_item_id"),
+    stripeSubscriptionId: text("stripe_subscription_id"),
+    stripeCustomerId: text("stripe_customer_id"),
+    tier: TierEnum("tier").notNull(),
+    createdAt,
+    updatedAt,
+},
+table => ({
+    clerkUserIdIndex: index("user_subscriptions.clerk_user_id_index").on(
+    table.clerkUserId
+    ),
+    stripeCustomerIdIndex: index(
+    "user_subscriptions.stripe_customer_id_index"
+    ).on(table.stripeCustomerId),
+})
+)
