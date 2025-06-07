@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text, uuid, timestamp, index, boolean } from "drizzle-orm/pg-core";
 
 const createdAt = timestamp("created_at", {withTimezone: true}).notNull().defaultNow();
@@ -36,4 +37,15 @@ export const PolicyBannerCustomisationTable = pgTable("policy_banner_customisati
     
 })
     
+
+export const productRelations = relations(ProductTable, ({ one, many }) => ({
+    policyBannerCustomisation: one(PolicyBannerCustomisationTable),
+}));
     
+
+export const policyBannerCustomisationRelations = relations(PolicyBannerCustomisationTable, ({ one }) => ({
+    product: one(ProductTable, {
+        fields: [PolicyBannerCustomisationTable.productId],
+        references: [ProductTable.id],
+    }),
+}));
