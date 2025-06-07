@@ -37,9 +37,9 @@ export const PolicyBannerCustomisationTable = pgTable("policy_banner_customisati
     
 })
     
-
 export const productRelations = relations(ProductTable, ({ one, many }) => ({
     policyBannerCustomisation: one(PolicyBannerCustomisationTable),
+    productViews: many(ProductViewsTable),
 }));
     
 
@@ -58,6 +58,16 @@ export const ProductViewsTable = pgTable('product_views', {
   visitedAt: timestamp('visited_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
+export const productViewsRelations = relations(ProductViewsTable, ({ one }) => ({
+    product: one(ProductTable, {
+        fields: [ProductViewsTable.productId],
+        references: [ProductTable.id],
+    }),
+    country: one(Countries, {
+        fields: [ProductViewsTable.countryId],
+        references: [Countries.id],
+    }),
+}));
 
 export const Countries = pgTable('countries', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -66,9 +76,20 @@ export const Countries = pgTable('countries', {
   countryGroupId: uuid('country_group_id').references(() => CountryGroups.id),
 });
 
+export const countriesRelations = relations(Countries, ({ one, many }) => ({
+    countryGroup: one(CountryGroups, {
+        fields: [Countries.countryGroupId],
+        references: [CountryGroups.id],
+    }),
+    productViews: many(ProductViewsTable),
+}));
 
 export const CountryGroups = pgTable('country_groups', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name'), // e.g., "GDPR", "Minimal", etc.
   description: text('description'),
 });
+
+export const countryGroupsRelations = relations(CountryGroups, ({ one, many }) => ({
+    countries: many(Countries),
+}));
