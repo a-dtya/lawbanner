@@ -1,9 +1,10 @@
 import { subscriptionTiersInOrder } from "@/data/subscriptionTiers";
 import { Button } from "@/components/ui/button";
+import { SignUpButton } from "@clerk/nextjs";
 
 export function PricingSection() {
   return (
-    <section
+    <section id="pricing"
       className="py-24 px-6 text-center"
       style={{
         background: `radial-gradient(circle at top, #f3f4f6 0%, #ffffff 100%)`,
@@ -22,10 +23,16 @@ export function PricingSection() {
           >
             <h3 className="text-xl font-semibold mb-1">{tier.name}</h3>
             <p className="text-muted-foreground mb-4 text-sm">{tier.description}</p>
-            <p className="text-3xl font-bold mb-4">
+            <p className="text-3xl font-bold">
               {tier.monthlyPrice === 0 ? "Free" : `$${tier.monthlyPrice}/mo`}
             </p>
-
+            <div className="mt-4 mb-4 w-58">
+            <SignUpButton>
+              <Button className="w-full">
+                {tier.monthlyPrice === 0 ? "Get Started" : "Subscribe"}
+              </Button>
+            </SignUpButton>
+            </div>
             <ul className="text-sm space-y-2 mb-6 text-left border-t pt-4">
               <li>
                 <strong>{tier.maxNumberOfVisits.toLocaleString()}</strong> visits/month
@@ -45,10 +52,7 @@ export function PricingSection() {
                 <span className="capitalize">{tier.features.supportPriority}</span>
               </li>
             </ul>
-
-            <Button className="mt-auto w-full">
-              {tier.monthlyPrice === 0 ? "Get Started" : "Subscribe"}
-            </Button>
+            
           </div>
         ))}
       </div>

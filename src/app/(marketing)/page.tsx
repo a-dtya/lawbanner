@@ -3,6 +3,7 @@ import { SignUpButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { ArrowRightIcon } from "lucide-react";
 import { PricingSection } from "./_components/PricingSection";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return <>
@@ -40,6 +41,7 @@ export default function Home() {
     </section>
 
     <PricingSection/>
+    <Footer/>
 
   </>
 }
