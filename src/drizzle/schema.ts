@@ -125,7 +125,6 @@ export const countryGroupPolicyOverridesRelations = relations(CountryGroupPolicy
 
 
 export const AiGeneratedContents = pgTable('ai_generated_contents', {
-  id: uuid('id').defaultRandom().primaryKey(),
   productId: uuid('product_id')
     .references(() => ProductTable.id, { onDelete: 'cascade' }),
   countryGroupId: uuid('country_group_id')
@@ -149,8 +148,6 @@ export const aiGeneratedContentsRelations = relations(AiGeneratedContents, ({ on
         references: [CountryGroups.id],
     }),
 }));
-
-
 
 export const TierEnum = pgEnum(
     "tier",
