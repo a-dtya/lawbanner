@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, timestamp, index } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, timestamp, index, boolean } from "drizzle-orm/pg-core";
 
 const createdAt = timestamp("created_at", {withTimezone: true}).notNull().defaultNow();
 const updatedAt = timestamp("updated_at", {withTimezone: true}).notNull().defaultNow().$onUpdate(() => new Date());
@@ -14,3 +14,26 @@ export const ProductTable = pgTable("products", {
 }, table => ({
     clerkUserIdIndex: index("products.clerk_user_id_index").on(table.clerkUserId),
 }));
+
+export const PolicyBannerCustomisationTable = pgTable("policy_banner_customisation", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    productId: uuid("product_id").notNull().references(()=>ProductTable.id, {onDelete: "cascade"}),
+    classPrefix: text("class_prefix"),
+    locationMessage: text('location_message').default(
+        'Hey there from {{country}}! We apply regional legal policies automatically.'
+      ),
+    bannerText: text('banner_text').default(
+    'By using this site, you agree to our {{policy_type}} policy.'
+    ),
+    backgroundColor: text('background_color').default('#ffffff'),
+    textColor: text('text_color').default('#000000'),
+    fontSize: text('font_size').default('1rem'),
+    position: text('position').default('body'),
+    isSticky: boolean('is_sticky').default(true),
+    showCloseButton: boolean('show_close_button').default(true),
+    createdAt,
+    updatedAt,
+    
+})
+    
+    
