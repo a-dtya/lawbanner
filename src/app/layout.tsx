@@ -24,7 +24,7 @@ export default function RootLayout({
         />
       </head>
         <body
-          className="font-sans antialiased bg-background text-foreground"
+          className="font-sans antialiased bg-background text-foreground selection:bg-[hsl(320,65%,52%,20%)] selection:text-white"
         >
           {children}
         </body>

@@ -87,4 +87,11 @@ export const subscriptionTiers: Record<SubscriptionTier, TierFeatures> = {
       supportPriority: 'priority',
     },
   },
-};
+} as const;
+
+export const subscriptionTiersInOrder = [
+  subscriptionTiers.free,
+  subscriptionTiers.basic,
+  subscriptionTiers.standard,
+  subscriptionTiers.premium,
+] as const;
