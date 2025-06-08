@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-
+import { Toaster } from "@/components/ui/sonner";
 
 
 export const metadata: Metadata = {
@@ -27,6 +27,7 @@ export default function RootLayout({
           className="font-sans antialiased bg-background text-foreground selection:bg-[hsl(320,65%,52%,20%)] selection:text-white"
         >
           {children}
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

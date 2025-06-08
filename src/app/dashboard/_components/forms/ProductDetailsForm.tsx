@@ -1,6 +1,8 @@
 import {useForm, SubmitHandler} from "react-hook-form"
 import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod"
+import createProduct from "@/server/actions/products"
+import {toast} from "sonner"
 
 export const productDetailsSchema = z.object({
     name: z.string().min(3, "Name must be at least 3 characters long"),
@@ -28,9 +30,16 @@ export default function ProductDetailsForm(){
         }
     })
 
-    const onSubmit: SubmitHandler<ProductDetailFieldTypes> = (data) => {
+    const onSubmit: SubmitHandler<ProductDetailFieldTypes> = async (data) => {
         try{
             console.log(data)
+            const result = await createProduct(data)
+            if(result?.error){
+                toast(`Error: ${result.error}, Message: ${result.message}`)
+            }
+            else{
+                toast("Product created successfully")
+            }
         }
         catch(error){
             setError("root", {type: "server", message: "Something went wrong while creating the product"})

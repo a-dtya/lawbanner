@@ -7,7 +7,8 @@ import {auth} from "@clerk/nextjs/server"
 import {createProduct as createProductDb} from "../db/products"
 import { redirect } from "next/navigation";
 
-export default async function createProduct(unsafeData: z.infer<typeof productDetailsSchema>){
+export default async function createProduct(unsafeData: z.infer<typeof productDetailsSchema>) 
+: Promise<{error: boolean, message: string} | undefined>{
     const {userId} = await auth()
     const {success, data} = productDetailsSchema.safeParse(unsafeData) // this checks if the data is valid, as per z.object
 
