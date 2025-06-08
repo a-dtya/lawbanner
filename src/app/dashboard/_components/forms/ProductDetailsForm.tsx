@@ -2,7 +2,7 @@ import {useForm, SubmitHandler} from "react-hook-form"
 import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod"
 
-const productDetailsSchema = z.object({
+export const productDetailsSchema = z.object({
     name: z.string().min(3, "Name must be at least 3 characters long"),
     url: z.string().url("Invalid URL"),
     description: z.string().max(100, "Description must be at most 100 characters long").min(5, "Description must be at least 5 characters long")
