@@ -5,6 +5,7 @@ import NoProducts from "./_components/NoProducts";
 import Link from "next/link";
 import { ArrowRightIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ProductGrid from "./_components/ProductGrid";
 
 export default async function DashboardPage() {
     const {userId} = await auth()
@@ -18,9 +19,10 @@ export default async function DashboardPage() {
             <Link className="group flex gap-2" href="/dashboard/products">
                 Products <ArrowRightIcon className="group-hover:translate-x-1 transition-transform"/>
             </Link>
+            <Button asChild>
+                <Link href="/dashboard/products/new"><PlusIcon className="mr-2 size-4"/>Add Product</Link>
+            </Button>
         </h2>
-        <Button asChild>
-            <Link href="/dashboard/products/new"><PlusIcon className="mr-2 size-4"/>Add Product</Link>
-        </Button>
+        <ProductGrid products={products}/>
     </>
 }
