@@ -2,7 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { GripHorizontal } from "lucide-react"
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@radix-ui/react-dropdown-menu"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 
 export default function ProductCard({
     id,
@@ -20,6 +21,7 @@ export default function ProductCard({
             <CardHeader>
                 <div className="flex gap-2 justify-between items-end">
                     <CardTitle><Link href={`/dashboard/products/${id}/edit`}>{name}</Link></CardTitle>
+                    <Dialog>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="size-8 p-0">
@@ -31,17 +33,22 @@ export default function ProductCard({
                                 <Link href={`/dashboard/products/${id}/edit`}>Edit</Link>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem>
-                                Add to Site
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
+                        
+                            <DropdownMenuContent>
+                            <DialogTrigger asChild>
+                                <DropdownMenuItem>
+                                    Add to Site
+                                </DropdownMenuItem>
+                            </DialogTrigger>
+                            </DropdownMenuContent>
+                        
                         <DropdownMenuContent>
                             <DropdownMenuItem>
                                 Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>    
                     </DropdownMenu>
+                    </Dialog>
                 </div>
                 <CardDescription>{url}</CardDescription>
             </CardHeader>
