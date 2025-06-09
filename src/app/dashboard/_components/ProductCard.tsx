@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { GripHorizontal } from "lucide-react"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
+import { AddToSiteModalContent } from "./AddToSiteModalContent"
 
 export default function ProductCard({
     id,
@@ -41,6 +42,8 @@ export default function ProductCard({
                                 </DropdownMenuItem>
                             </DialogTrigger>
                             </DropdownMenuContent>
+                            <AddToSiteModalContent productId={id}/>
+
                         
                         <DropdownMenuContent>
                             <DropdownMenuItem>
