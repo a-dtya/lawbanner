@@ -5,6 +5,8 @@ import { GripHorizontal } from "lucide-react"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { AddToSiteModalContent } from "./AddToSiteModalContent"
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import DeleteProductAlertDialog from "./DeleteProductAlertDialog"
 
 export default function ProductCard({
     id,
@@ -23,6 +25,7 @@ export default function ProductCard({
                 <div className="flex gap-2 justify-between items-end">
                     <CardTitle><Link href={`/dashboard/products/${id}/edit`}>{name}</Link></CardTitle>
                     <Dialog>
+                    <AlertDialog>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="size-8 p-0">
@@ -46,11 +49,16 @@ export default function ProductCard({
 
                         
                         <DropdownMenuContent>
+                            <AlertDialogTrigger asChild>
                             <DropdownMenuItem>
                                 Delete
                             </DropdownMenuItem>
-                        </DropdownMenuContent>    
+                            </AlertDialogTrigger>
+                        </DropdownMenuContent>  
+                        <DeleteProductAlertDialog/>
+
                     </DropdownMenu>
+                    </AlertDialog>
                     </Dialog>
                 </div>
                 <CardDescription>{url}</CardDescription>
