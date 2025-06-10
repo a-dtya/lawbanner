@@ -1,5 +1,5 @@
 import { db } from "@/drizzle/db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import { PolicyBannerCustomisationTable, ProductTable } from "@/drizzle/schema";
 
 export function getProducts(userId: string){
@@ -24,4 +24,10 @@ export async function createProduct(data : typeof ProductTable.$inferInsert){
     }
 
     return newProduct
+}
+
+export async function deleteProduct(productId: string, userId: string){
+    const {rowCount} = await db.delete(ProductTable).where(and(eq(ProductTable.id, productId), eq(ProductTable.clerkUserId, userId)))
+    
+    return rowCount > 0
 }

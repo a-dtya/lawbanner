@@ -55,7 +55,7 @@ export default function ProductCard({
                             </DropdownMenuItem>
                             </AlertDialogTrigger>
                         </DropdownMenuContent>  
-                        <DeleteProductAlertDialog/>
+                        <DeleteProductAlertDialog productId={id}/>
 
                     </DropdownMenu>
                     </AlertDialog>
