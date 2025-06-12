@@ -4,8 +4,9 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from "@/components/ui/button"
 import { useTransition } from "react"
 import { toast } from "sonner"
+import { deleteProduct } from "@/server/actions/products"
 
-export default function DeleteProductAlertDialog(){
+export default function DeleteProductAlertDialog({productId}: {productId: string}){
     const [isDeletePending, startDeleteTransition] = useTransition()
     return(
             <AlertDialogContent>
@@ -17,7 +18,17 @@ export default function DeleteProductAlertDialog(){
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction disabled={isDeletePending}>Continue</AlertDialogAction>
+                    <AlertDialogAction onClick={() => startDeleteTransition(
+                        async () => {
+                            const {error, message} = await deleteProduct(productId)
+                            if(error){
+                                toast(message)
+                            }
+                            else{
+                                toast(message)
+                            }
+                        }
+                    )} disabled={isDeletePending}>Continue</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
     )
