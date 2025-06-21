@@ -1,9 +1,12 @@
 import { db } from "@/drizzle/db";
 import { eq, desc, and } from "drizzle-orm";
 import { PolicyBannerCustomisationTable, ProductTable } from "@/drizzle/schema";
+import { getUserTag, dbCache, CACHE_TAGS } from "@/lib/cache";
+
 
 export function getProducts(userId: string){
-    return db.select().from(ProductTable).where(eq(ProductTable.clerkUserId, userId)).orderBy(desc(ProductTable.createdAt))
+    const cacheFn = dbCache(getProductsInternal, {tags: [getUserTag(userId, CACHE_TAGS.products)]})
+    return cacheFn(userId)
 }
 
 
@@ -31,3 +34,8 @@ export async function deleteProduct(productId: string, userId: string){
     
     return rowCount > 0
 }
+
+function getProductsInternal(userId: string){
+    return db.select().from(ProductTable).where(eq(ProductTable.clerkUserId, userId)).orderBy(desc(ProductTable.createdAt))
+}
+    
