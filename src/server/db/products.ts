@@ -1,7 +1,8 @@
 import { db } from "@/drizzle/db";
 import { eq, desc, and } from "drizzle-orm";
 import { PolicyBannerCustomisationTable, ProductTable } from "@/drizzle/schema";
-import { getUserTag, dbCache, CACHE_TAGS } from "@/lib/cache";
+import { getUserTag, dbCache, CACHE_TAGS} from "@/lib/cache";
+import { revalidateTag } from "next/cache";
 
 
 export function getProducts(userId: string){
@@ -26,11 +27,15 @@ export async function createProduct(data : typeof ProductTable.$inferInsert){
         await db.delete(ProductTable).where(eq(ProductTable.id, newProduct.id))
     }
 
+    revalidateTag(getUserTag(data.clerkUserId, CACHE_TAGS.products))
+
     return newProduct
 }
 
 export async function deleteProduct(productId: string, userId: string){
     const {rowCount} = await db.delete(ProductTable).where(and(eq(ProductTable.id, productId), eq(ProductTable.clerkUserId, userId)))
+
+    revalidateTag(getUserTag(userId, CACHE_TAGS.products))
     
     return rowCount > 0
 }
