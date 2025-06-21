@@ -1,4 +1,5 @@
-import { revalidateTag } from "next/cache";
+import { revalidateTag, unstable_cache } from "next/cache";
+import { cache } from "react";
 
 export type ValidTags = ReturnType<typeof getGlobalTag> | ReturnType<typeof getUserTag> | ReturnType<typeof getIdTag>
 
@@ -27,3 +28,8 @@ export function clearAllCache(){
     revalidateTag("*")
 }
 
+export function dbCache(cb: Parameters<typeof unstable_cache>[0], {tags}:{
+    tags: ValidTags[]
+}){
+    cache(unstable_cache(cb, undefined, {tags: [...tags,"*"]}))
+}
