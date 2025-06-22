@@ -10,6 +10,9 @@ export function getProducts(userId: string){
     return cacheFn(userId)
 }
 
+export function getProduct({id, userId}:{id: string, userId: string}){
+    return db.select().from(ProductTable).where(and(eq(ProductTable.id, id), eq(ProductTable.clerkUserId, userId))).limit(1)
+}
 
 //create new product, at the same time add in policy banner cust table. if duplicate entry found, delete the product
 export async function createProduct(data : typeof ProductTable.$inferInsert){
