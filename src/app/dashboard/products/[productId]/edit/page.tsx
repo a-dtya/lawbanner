@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server"
 import { getProduct } from "@/server/db/products"
 import { notFound } from "next/navigation"
 import PageWithbackButton from "../../../_components/PageWithbackButton"
+import ProductDetailsForm from "@/app/dashboard/_components/forms/ProductDetailsForm"
 
 export default async function EditProductPage(
     {params: {productId},
@@ -25,6 +26,7 @@ export default async function EditProductPage(
     return (
         <PageWithbackButton backButtonHref="/dashboard/products" pageTitle="Edit Product">
             {/* Product form */}
+            <ProductDetailsForm product={product[0]}/>
         </PageWithbackButton>
     )
 

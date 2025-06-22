@@ -1,7 +1,7 @@
 import {useForm, SubmitHandler} from "react-hook-form"
 import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod"
-import createProduct from "@/server/actions/products"
+import {createProduct} from "@/server/actions/products"
 import {toast} from "sonner"
 
 export const productDetailsSchema = z.object({
@@ -18,15 +18,15 @@ type ProductDetailFieldTypes = z.infer<typeof productDetailsSchema>
 //     description: string
 // }
 
-export default function ProductDetailsForm(){
+export default function ProductDetailsForm({product}: {product?: ProductDetailFieldTypes}){
     {/*Now we have to register the input fields with the useForm*/}
     {/*We use the zod schema to validate the form. connect hook form to zod schema using resolver*/}
     const {register, handleSubmit, setError, formState: {errors, isSubmitting}} = useForm<ProductDetailFieldTypes>({
         resolver: zodResolver(productDetailsSchema),
         defaultValues:{
-            name: "test website",
-            url: "https://testwebsite.com",
-            description: "This is a test website"
+            name: product?.name || "test website",
+            url: product?.url || "https://testwebsite.com",
+            description: product?.description || "This is a test website"
         }
     })
 
